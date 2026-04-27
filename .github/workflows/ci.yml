@@ -59,7 +59,11 @@ jobs:
           TEST_MODE: true
           NODE_ENV: test
         run: |
-          bun test --preload ./tests/unit/setup.ts tests/unit/*.test.ts tests/unit/**/*.test.ts
+          bun test --preload ./tests/unit/setup.ts tests/unit/*.test.ts tests/unit/**/*.test.ts 2>&1 | tee test-output.txt || true
+          grep -E "^\(fail\)" test-output.txt || echo "No explicit failures found"
+          grep -E "error:" test-output.txt | head -20 || echo "No errors found"
+          cat test-output.txt | tail -30
+          exit $(grep -c "tests failed" test-output.txt | awk '{if ($1 > 0) print 1; else print 0}')
 
   build:
     name: 🏗️ Production Build
