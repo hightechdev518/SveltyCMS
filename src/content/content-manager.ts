@@ -1679,11 +1679,14 @@ class ContentManager {
 		return schemas;
 	}
 
-	private async _processSchemaFile(filePath: string, processModule: Function): Promise<Schema | null> {
+	private async _processSchemaFile(
+		filePath: string,
+		processModule: (content: string) => Promise<{ schema?: Schema } | null>
+	): Promise<Schema | null> {
 		try {
 			const fs = await getFs();
 			const content = await fs.readFile(filePath, 'utf-8');
-			const moduleData = await (processModule as any)(content);
+			const moduleData = await processModule(content);
 
 			if (!moduleData?.schema) {
 				return null;
