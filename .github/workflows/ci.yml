@@ -250,7 +250,8 @@ jobs:
           TEST_MODE: true
         run: |
           bun run preview > preview.log 2>&1 &
-          bun x wait-on http://localhost:4173/api/system/health --timeout 60000
+          sleep 5
+          bun x wait-on http://localhost:4173/api/system/health --timeout 120000
           bun x playwright test tests/e2e/setup-wizard.spec.ts --project=chromium
           bun x playwright test tests/e2e/role-based-access.spec.ts --project=chromium
         timeout-minutes: 20
