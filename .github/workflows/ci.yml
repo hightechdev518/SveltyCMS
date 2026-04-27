@@ -59,8 +59,7 @@ jobs:
           TEST_MODE: true
           NODE_ENV: test
         run: |
-          bun x svelte-kit sync
-          bun test --preload ./tests/unit/setup.ts tests/unit/**/*.test.ts
+          find tests/unit -name "*.test.ts" | xargs bun test --preload ./tests/unit/setup.ts
 
   build:
     name: 🏗️ Production Build
