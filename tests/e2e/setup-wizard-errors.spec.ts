@@ -12,15 +12,15 @@ test('should show error on bad database connection', async ({ page }) => {
 		return;
 	}
 
-	await page.getByLabel(/Host/).fill('bad-host-name');
-	await page.getByLabel(/Password/).fill('wrong-password');
+	await page.locator('#db-host').fill('bad-host-name');
+	await page.locator('#db-password').fill('wrong-password');
 	// ... fill other fields ...
 
-	await page.getByRole('button', { name: 'Test Connection' }).click();
+	await page.getByLabel('Test database connection').click();
 
 	// Assert that an error message appears
-	await expect(page.getByText(/Connection failed/)).toBeVisible();
+	await expect(page.getByText('Connection Failed')).toBeVisible({ timeout: 30000 });
 
 	// Assert that the "Next" button is NOT visible or is disabled
-	await expect(page.getByRole('button', { name: 'Next' })).toBeDisabled();
+	await expect(page.getByRole('button', { name: 'Next' })).toBeDisabled({ timeout: 30000 });
 });

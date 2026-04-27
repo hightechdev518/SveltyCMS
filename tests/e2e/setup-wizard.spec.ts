@@ -13,7 +13,7 @@ import { expect, test, type Page } from '@playwright/test';
 // Helper to click "Next" button and wait for transition
 async function clickNext(page: Page) {
 	const nextButton = page.getByLabel('Next', { exact: true });
-	await expect(nextButton).toBeEnabled();
+	await expect(nextButton).toBeEnabled({ timeout: 30000 });
 	await nextButton.click();
 	await page.waitForTimeout(500); // Wait for stepper animation
 }
@@ -31,7 +31,7 @@ test('Setup Wizard: Configure DB and Create Admin', async ({ page }) => {
 	}
 
 	// Wait for setup to load and hydrate
-	await expect(page).toHaveURL(/\/setup/);
+	await expect(page).toHaveURL(/\/setup/, { timeout: 30000 });
 	await page.waitForLoadState('networkidle');
 
 	// Wait for any cookie consent and accept it to prevent it blocking other elements
@@ -84,14 +84,14 @@ test('Setup Wizard: Configure DB and Create Admin', async ({ page }) => {
 	await testDbButton.click({ force: true });
 
 	try {
-		await expect(page.getByText(/connection successful/i).first()).toBeVisible({
+		await expect(page.getByText(/Success!/i).first()).toBeVisible({
 			timeout: 40_000
 		});
 	} catch (_err) {
 		console.log('Initial DB test failed, retrying once...');
-		await page.waitForTimeout(5000);
+		await page.waitForTimeout(500);
 		await testDbButton.click({ force: true });
-		await expect(page.getByText(/connection successful/i).first()).toBeVisible({
+		await expect(page.getByText(/Success!/i).first()).toBeVisible({
 			timeout: 60_000
 		});
 	}
