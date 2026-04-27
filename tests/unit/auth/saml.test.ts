@@ -10,7 +10,17 @@
  */
 
 import { describe, expect, it, beforeEach, afterEach } from 'bun:test';
+import { mock } from 'bun:test';
 // which mock @boxyhq/saml-jackson, @src/services/settings-service, etc.
+
+mock.module('@boxyhq/saml-jackson', () => ({
+	controllers: async () => ({
+		oauthController: {},
+		connectionAPIController: {
+			createConnection: async () => ({ id: 'conn_123' })
+		}
+	})
+}));
 
 describe('SAML Authentication Service', () => {
 	let originalEnv: any;

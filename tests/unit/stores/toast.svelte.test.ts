@@ -5,6 +5,22 @@
 import { describe, expect, it, beforeEach, spyOn, afterEach } from 'bun:test';
 import { toast } from '@stores/toast.svelte';
 
+const mockSessionStorage: Record<string, string> = {};
+globalThis.sessionStorage = {
+	getItem: (key: string) => mockSessionStorage[key] ?? null,
+	setItem: (key: string, value: string) => {
+		mockSessionStorage[key] = value;
+	},
+	removeItem: (key: string) => {
+		delete mockSessionStorage[key];
+	},
+	clear: () => {
+		Object.keys(mockSessionStorage).forEach((k) => delete mockSessionStorage[k]);
+	},
+	length: 0,
+	key: () => null
+} as Storage;
+
 describe('ToastStore', () => {
 	beforeEach(() => {
 		toast.clear();
