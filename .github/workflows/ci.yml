@@ -59,7 +59,7 @@ jobs:
           TEST_MODE: true
           NODE_ENV: test
         run: |
-          find tests/unit -name "*.test.ts" | xargs bun test --preload ./tests/unit/setup.ts
+          bun test --preload ./tests/unit/setup.ts tests/unit/*.test.ts tests/unit/**/*.test.ts
 
   build:
     name: 🏗️ Production Build
