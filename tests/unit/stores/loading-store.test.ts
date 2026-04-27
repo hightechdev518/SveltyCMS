@@ -15,6 +15,10 @@
 import { beforeEach, describe, expect, it } from 'bun:test';
 import { LoadingStore, loadingOperations } from '@src/stores/loading-store.svelte';
 
+// Mock the browser environment for testing
+import { vi } from 'bun:test';
+vi.mock('$app/environment', () => ({ browser: true }));
+
 describe('Loading Store - Basic Operations', () => {
 	let store: LoadingStore;
 
