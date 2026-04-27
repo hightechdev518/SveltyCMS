@@ -10,6 +10,10 @@
  * - Error handling
  */
 
+(globalThis as any).$derived = (fn: any) => (typeof fn === 'function' ? fn() : fn);
+(globalThis as any).$derived.by = (fn: any) => (typeof fn === 'function' ? fn() : fn);
+(globalThis as any).$state = (v: any) => v;
+
 import { beforeEach, describe, expect, it } from 'bun:test';
 import { setupStore } from '@src/stores/setup-store.svelte';
 
@@ -79,8 +83,7 @@ describe('Setup Store', () => {
 		expect(setupStore.validateStep(1, false)).toBe(true);
 	});
 
-	// Skipped: relies on $derived.by Svelte reactivity not available in test environment
-	it.skip('should check password matching', () => {
+	it('should check password matching', () => {
 		const { wizard } = setupStore;
 		wizard.adminUser.password = 'Password123!';
 		wizard.adminUser.confirmPassword = 'Mismatch123!';
